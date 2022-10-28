@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模拟数据请求</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            margin: 10px auto;
+            text-align: center;
+
+        }
+
+        table thead tr th {
+            border: 1px solid #99b0da;
+            ;
+
+        }
+
+        table tbody tr td {
+            padding: 10px;
+            border: 1px solid #99b0da;
+            ;
+        }
+    </style>
+</head>
+
+<body>
+    <button id="qingqiu">请求</button>
+    <table>
+        <thead>
+            <tr>
+                <th>学号</th>
+                <th>姓名</th>
+                <th>性别</th>
+                <th>邮箱</th>
+                <th>生日</th>
+                <th>手机号</th>
+                <th>住址</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody class="xuan">
+
+        </tbody>
+    </table>
+    <script src="./js/mock.js"></script>
+    <script src="./js/jquery-3.4.1.min.js"></script>
+    <script>
+        $('#qingqiu').on('click', function () {
+            $.ajax({
+                url: 'js/data.json',
+                type: 'get',
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data)
+                    creatDom(data.data)
+                }
+            })
+        })
+        function creatDom(data) {
+            var str = '';
+            data.forEach(function (ele) {
+                str +=
+                    '<tr>' +
+                    '<td>' + ele.id + '</td>' +
+                    '<td>' + ele.name + '</td>' +
+                    '<td>' + ele.sex + '</td>' +
+                    '<td>' + ele.email + '</td>' +
+                    '<td>' + ele.birth + '</td>' +
+                    '<td>' + ele.phone + '</td>' +
+                    '<td>' + ele.address + '</td>' +
+                    '<td><button>编辑</button><button>刪除</button></td>' +
+                    '</tr>'
+            })
+            $('.xuan').html(str)
+        }
+        Mock.mock('js/data.json', {
+            "status": "success",
+            "msg": "查询成功",
+            'data|30' : [{
+                'sNo|+1' : 10000,
+                'id|+1' : 1,
+                'name' : '@cname',
+                'sex|1' : ['男','女'],
+                'birth' : '@Id',
+                'email' : '@email',
+                'phone' : '@natural(18000000000,15000000000,13000000000)',
+                'address' : '@county(ture)  @cword(1,8)' ,
+                'ctime' : '@date(T)',
+                'utime': '@date(T)'
+            }]
+        })
+      Mock.setup({
+        timeout : 3000
+      })
+      
+    </script>
+</body>
+
+</html>
